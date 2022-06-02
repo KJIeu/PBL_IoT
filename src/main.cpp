@@ -1,7 +1,19 @@
 #include <Arduino.h>
 
-void setup() {
-  // put your setup code here, to run once:
+//Climat control
+#include "TemperatureControl.h"
+
+
+//Gas leakage
+#include "MQ2.h"
+
+TemperatureControl temperatureControl();
+
+
+
+void setup() { 
+    //temperatureControl.init();
+    
 }
 
 void loop() {
@@ -9,14 +21,16 @@ void loop() {
 }
 
 
+
+
 //TO DO:
 /*
     1)  wifi shield esp8266 connection  (hard)
 
-    2)  Climate control                 (easy)
-        a)  DHT11 sensor          
-        b)  fan control 
-        c)  heater element control
+    2)  Climate control                 DONE
+        a)  DHT11 sensor                +
+        b)  fan control                 +
+        c)  heater element control      +
 
     3)  RFID lock                       (middle)
         a)  RFID panel
@@ -36,5 +50,5 @@ void loop() {
     1)  sourse of power
     2)  L298 (or other) motor driver
     3)  electromagnetic lock(solenoid)
-    
+
 */
