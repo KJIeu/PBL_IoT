@@ -5,7 +5,7 @@ Servo servo;
 
 GasLeakageControl::GasLeakageControl(){}
 
-void GasLeakageControl::begin()
+void GasLeakageControl::init()
 {
     servo.attach(Servo_pin);
     mq2.begin();

@@ -1,5 +1,5 @@
-#ifndef GasLeaKageControl_h
-#define GasLeaKageControl_h
+#ifndef GasLeakageControl_h
+#define GasLeakageControl_h
 
 #include <Arduino.h>
 #include "MQ2.h"
@@ -10,13 +10,13 @@
 #define Servo_pin 6
 
 
-class GasLeaKageControl
+class GasLeakageControl
 {
     private:
 
     public:
-        GasLeaKageControl();
-        void begin();
+        GasLeakageControl();
+        void init();
         bool checkCO();
         bool checkLPG();
         bool checkSmoke();

@@ -1,25 +1,22 @@
-#include "TemperatureControl.h"
+#include "PlantAutowater.h"
 
-DHT dht(DHT_pin, DHT_type);
-Relay relay(relayPin);
-MotorDriver298 MotorDriver(motorPin1, motorPin2, motorPin3);
+MotorDriver298 MotorDriver(pumpPin1, pumpPin2);
 
 
-TemperatureControl::TemperatureControl(){}
+PlantAutowater::PlantAutowater(){}
 
-void TemperatureControl::init()
+void PlantAutowater::init()
 {
-    dht.begin();
-    relay.init();
-}
-
-void TemperatureControl::setTemperature(int temperature)
-{
-    targetTemperature = temperature;
     
 }
 
-void TemperatureControl::setWorkState(bool state)
+void PlantAutowater::setHumidity(int humidity)
+{
+    targetHumidity = humidity;
+    
+}
+
+void PlantAutowater::setWorkState(bool state)
 {
     workState = state;
     if(workState)
@@ -29,27 +26,26 @@ void TemperatureControl::setWorkState(bool state)
     else
     {
         MotorDriver.drive(true, 0);
-        relay.relayOff();
     }
 }
 
-bool TemperatureControl::getWorkState()
+bool PlantAutowater::getWorkState()
 {
   return workState;
 }
 
-void TemperatureControl::control()
+void PlantAutowater::control()
 {
     if(workState)
     {
-        currentTemperature =  dht.readTemperature();
-        if ((currentTemperature > targetTemperature + bounds) && heaterState)
+        currentHumidity =  dht.readHumidity();
+        if ((currentHumidity > targetHumidity + bounds) && heaterState)
         {
-            relay.relayOff();
+            relay.rela
             heaterState = false;
         }
 
-        if ((currentTemperature < targetTemperature - bounds) && !heaterState)
+        if ((currentHumidity < targetHumidity - bounds) && !heaterState)
         {
             relay.relayOn();
             heaterState = true;
@@ -58,7 +54,7 @@ void TemperatureControl::control()
         timeCounterMs = millis() - timeCounterMs;
 
         float timeCounterSec = (float)timeCounterMs / 1000;
-        currentError = currentTemperature - targetTemperature;
+        currentError = currentHumidity - targetHumidity;
 
         if (((((Ki * integralError) <= PID_DUTY_CYCLE_MAX) && currentError >= 0)) || 
             (((Ki * integralError) >= PID_DUTY_CYCLE_MIN) && currentError < 0))
@@ -84,12 +80,10 @@ void TemperatureControl::control()
     }
 }
 
-int TemperatureControl::getHumidity()
+int PlantAutowater::getHumidity()
 {
-    return dht.readHumidity();
+    return analogRead(SoilHumiditySensor_pin);
 }
 
-int TemperatureControl::getTemperature()
-{
-    return dht.readTemperature();
-}
+
+

@@ -1,23 +1,19 @@
-#ifndef TemperatureControl_h
-#define TemperatureControl_h
+#ifndef PlantAutowater_h
+#define PlantAutowater_h
 
 #include <Arduino.h>
-#include "DHT.h"
 #include "MotorDriver298.h"
 #include "Relay.h"
 
 //DHT sensor
-#define DHT_pin 2       //Pin for DHT sensor
-#define DHT_type DHT11  //type of dht sensor
+#define SoilHumiditySensor_pin A3      
 #define PID_DUTY_CYCLE_MIN 0
 #define PID_DUTY_CYCLE_MAX 100
 #define bounds 3
-#define relayPin 7     //Pin for Relay-heater
-#define motorPin1 5
-#define motorPin2 4
-#define motorPin3 3
+#define pumpPin1 5
+#define pumpPin2 4
 
-class TemperatureControl
+class PlantAutowater
 {
     private:
         
@@ -25,10 +21,10 @@ class TemperatureControl
         //false => control doesn't works
         //true => works
         bool heaterState = false;
-        int targetTemperature = 20;
+        int targetHumidity = 20;
 
         float pwmDutyCycle = 500;
-        float currentTemperature = 0.0;
+        float currentHumidity = 0.0;
         //PID coefs
         float Kp = 300;
         float Ki = 10;
@@ -44,13 +40,12 @@ class TemperatureControl
 
 
     public:
-        TemperatureControl();
+        PlantAutowater();
         void init();
-        void setTemperature(int temperature);
+        void setHumidity(int temperature);
         void setWorkState(bool state);
         bool getWorkState();
         void control();
-        int getTemperature();
         int getHumidity();
 };
 
