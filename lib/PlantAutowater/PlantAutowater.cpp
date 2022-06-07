@@ -32,8 +32,6 @@ int PlantAutowater::getBounds()
     return humidityBounds;
 }
 
-
-
 void PlantAutowater::setWorkState(bool state)
 {
     workState = state;
@@ -52,11 +50,16 @@ bool PlantAutowater::getWorkState()
   return workState;
 }
 
+bool PlantAutowater::getRelayState()
+{
+  return relayState;
+}
+
 void PlantAutowater::control()
 {
     if(workState)
     {
-        currentHumidity =  getHumidity();
+        currentHumidity =  getHumidity() * 100 / 1023;
 
         if ((currentHumidity < targetHumidity - (targetHumidity*humidityBounds/100)))
         {

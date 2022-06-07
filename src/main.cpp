@@ -4,7 +4,12 @@
 #include "GasLeakageControl.h"
 #include "WaterLeakageControl.h"
 #include "PlantAutowater.h"
+#include "RFIDLock.h"
 
+#define timing 60000 //one minute timing
+
+//RFID Lock
+RFIDLock lock;
 //Climat control
 TemperatureControl temperatureControl;
 //Gasleakage control
@@ -22,28 +27,66 @@ bool smokeState = true;
 //water state
 bool waterState = true;
 
+bool doorState = false; //false - closed, true - open
+
+unsigned long previousTime1 = 0;
+unsigned long previousTime2 = 0;
+unsigned long previousTime3 = 0;
+unsigned long lockTime = 0;
+
+void autonomousOperationMode();
 
 void setup() { 
     temperatureControl.init();
     gasLeakageControl.init();
     waterLeakageControl.init();
     plantAutowater.init();
+    lock.init();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+    autonomousOperationMode();
 }
 
 
 void autonomousOperationMode()
 {
-    LPGState = gasLeakageControl.checkLPG();
-    COState = gasLeakageControl.checkCO();
-    smokeState = gasLeakageControl.checkSmoke();
-    waterState = waterLeakageControl.checkWater();
+    if(lock.checkCard())
+    {
+        doorState = true;
+        lockTime = millis() + timing;
+    }
 
-    temperatureControl.control();
-    plantAutowater.control();
+    if(doorState && lockTime <= millis())
+    {
+        lock.setClosed();
+    }
+
+    if (plantAutowater.getRelayState())
+    {
+        plantAutowater.control();
+    }
+
+    if (millis() - previousTime1 >= timing)
+    {
+        previousTime1 = millis();
+        LPGState = gasLeakageControl.checkLPG();
+        COState = gasLeakageControl.checkCO();
+        smokeState = gasLeakageControl.checkSmoke();
+        waterState = waterLeakageControl.checkWater();
+    }
+
+    if (millis() - previousTime2 >= timing * 5)
+    {
+        previousTime1 = millis();
+        temperatureControl.control();
+    }
+
+    if (millis() - previousTime1 >= timing * 30)
+    {
+        previousTime3 = millis();
+        plantAutowater.control();
+    }
 }
 
 
@@ -58,9 +101,9 @@ void autonomousOperationMode()
         c)  heater element control      +
         d)  PID temperature control     +
 
-    3)  RFID lock                       (middle)
-        a)  RFID panel
-        b)  electromagnetic lock
+    3)  RFID lock                       DONE
+        a)  RFID panel                  +
+        b)  electromagnetic lock        +
 
     4)  Water leakage                   DONE
         a)  water detector              +
@@ -76,12 +119,5 @@ void autonomousOperationMode()
 
     7)  realize EEPROM                  (hard++)
         (energoindependent memory)
-
-*/
-
-//TO BUY LIST:
-/*
-
-    3)  electromagnetic lock(solenoid)
 
 */

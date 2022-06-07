@@ -4,8 +4,8 @@
 #include <Arduino.h>
 #include "Servo.h"
 
-#define Water_sensor_pin A4
-#define Servo_pin 10
+#define Water_sensor_pin A1
+#define Servo_pin 8
 
 
 class WaterLeakageControl

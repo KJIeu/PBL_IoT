@@ -6,7 +6,7 @@
 #include "Servo.h"
 
 
-#define MQ2_pin A5
+#define MQ2_pin A0
 #define Servo_pin 6
 
 

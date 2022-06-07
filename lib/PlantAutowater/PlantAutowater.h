@@ -5,8 +5,8 @@
 #include "Relay.h"
 
 //DHT sensor
-#define SoilHumiditySensor_pin A3      
-#define relayPin 8
+#define SoilHumiditySensor_pin A2      
+#define relayPin 9
 
 class PlantAutowater
 {
@@ -17,7 +17,7 @@ class PlantAutowater
         //true => works
         int targetHumidity = 20;
         int humidityBounds = 10;
-        int currentHumidity = 0;
+        float currentHumidity = 0.0;
         bool relayState = false;
 
 
@@ -30,6 +30,7 @@ class PlantAutowater
         int getBounds();
         void setWorkState(bool state);
         bool getWorkState();
+        bool getRelayState();
         void control();
 };
 
