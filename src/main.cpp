@@ -3,6 +3,7 @@
 #include "TemperatureControl.h"
 #include "GasLeakageControl.h"
 #include "WaterLeakageControl.h"
+#include "PlantAutowater.h"
 
 //Climat control
 TemperatureControl temperatureControl;
@@ -10,18 +11,40 @@ TemperatureControl temperatureControl;
 GasLeakageControl gasLeakageControl;
 //water leakage control
 WaterLeakageControl waterLeakageControl;
+//Plant autowater
+PlantAutowater plantAutowater;
+
+//gas states
+bool LPGState = true;
+bool COState = true;
+bool smokeState = true;
+
+//water state
+bool waterState = true;
 
 
 void setup() { 
     temperatureControl.init();
     gasLeakageControl.init();
     waterLeakageControl.init();
+    plantAutowater.init();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 }
 
+
+void autonomousOperationMode()
+{
+    LPGState = gasLeakageControl.checkLPG();
+    COState = gasLeakageControl.checkCO();
+    smokeState = gasLeakageControl.checkSmoke();
+    waterState = waterLeakageControl.checkWater();
+
+    temperatureControl.control();
+    plantAutowater.control();
+}
 
 
 
@@ -50,7 +73,6 @@ void loop() {
     6)  Plant autowater                 DONE
         a)  soil water detector         +
         b)  water pump                  +
-        c)  PID water control           +
 
     7)  realize EEPROM                  (hard++)
         (energoindependent memory)
