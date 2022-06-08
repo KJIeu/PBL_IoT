@@ -7,7 +7,7 @@
 
 
 #define MQ2_pin A0
-#define Servo_pin 6
+#define Servo_pin 7
 
 
 class GasLeakageControl

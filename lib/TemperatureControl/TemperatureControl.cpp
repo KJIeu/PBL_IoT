@@ -4,8 +4,7 @@ DHT dht(DHT_pin, DHT_type);
 Relay relay(relayPin);
 MotorDriver298 MotorDriver(motorPin1, motorPin2, motorPin3);
 
-
-TemperatureControl::TemperatureControl(){}
+TemperatureControl::TemperatureControl() {}
 
 void TemperatureControl::init()
 {
@@ -16,13 +15,12 @@ void TemperatureControl::init()
 void TemperatureControl::setTemperature(int temperature)
 {
     targetTemperature = temperature;
-    
 }
 
 void TemperatureControl::setWorkState(bool state)
 {
     workState = state;
-    if(workState)
+    if (workState)
     {
         control();
     }
@@ -35,14 +33,14 @@ void TemperatureControl::setWorkState(bool state)
 
 bool TemperatureControl::getWorkState()
 {
-  return workState;
+    return workState;
 }
 
 void TemperatureControl::control()
 {
-    if(workState)
+    if (workState)
     {
-        currentTemperature =  dht.readTemperature();
+        currentTemperature = dht.readTemperature();
         if ((currentTemperature > targetTemperature + bounds) && heaterState)
         {
             relay.relayOff();
@@ -60,10 +58,10 @@ void TemperatureControl::control()
         float timeCounterSec = (float)timeCounterMs / 1000;
         currentError = currentTemperature - targetTemperature;
 
-        if (((((Ki * integralError) <= PID_DUTY_CYCLE_MAX) && currentError >= 0)) || 
+        if (((((Ki * integralError) <= PID_DUTY_CYCLE_MAX) && currentError >= 0)) ||
             (((Ki * integralError) >= PID_DUTY_CYCLE_MIN) && currentError < 0))
         {
-          integralError += currentError * timeCounterSec;
+            integralError += currentError * timeCounterSec;
         }
 
         differentialError = (currentError - previousError) / timeCounterSec;
@@ -71,12 +69,12 @@ void TemperatureControl::control()
 
         if (pwmDutyCycle < PID_DUTY_CYCLE_MIN)
         {
-          pwmDutyCycle = PID_DUTY_CYCLE_MIN;
+            pwmDutyCycle = PID_DUTY_CYCLE_MIN;
         }
 
         if (pwmDutyCycle > PID_DUTY_CYCLE_MAX)
         {
-          pwmDutyCycle = PID_DUTY_CYCLE_MAX;
+            pwmDutyCycle = PID_DUTY_CYCLE_MAX;
         }
         MotorDriver.drive(true, pwmDutyCycle);
 

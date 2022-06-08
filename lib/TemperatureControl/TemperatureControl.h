@@ -7,15 +7,15 @@
 #include "Relay.h"
 
 //DHT sensor
-#define DHT_pin 2       //Pin for DHT sensor
+#define DHT_pin 30       //Pin for DHT sensor
 #define DHT_type DHT11  //type of dht sensor
 #define PID_DUTY_CYCLE_MIN 0
 #define PID_DUTY_CYCLE_MAX 100
 #define bounds 3
-#define relayPin 7     //Pin for Relay-heater
-#define motorPin1 5
-#define motorPin2 4
-#define motorPin3 3
+#define relayPin 29     //Pin for Relay-heater
+#define motorPin1 28
+#define motorPin2 27
+#define motorPin3 6
 
 class TemperatureControl
 {

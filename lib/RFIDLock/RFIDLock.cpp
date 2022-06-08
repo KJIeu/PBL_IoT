@@ -8,10 +8,14 @@ RFIDLock::RFIDLock()
 
 void RFIDLock::init()
 {
+    Serial.begin(9600);   // Initiate a serial communication
+    SPI.begin();          // Initiate  SPI bus
+    mfrc522.PCD_Init(); 
     relay_Lock.init();
     pinMode(LED_R, OUTPUT);
     pinMode(LED_G, OUTPUT);
     pinMode(LED_B, OUTPUT);
+    setClosed();
 }
 
 void RFIDLock::readCard()
@@ -24,8 +28,9 @@ void RFIDLock::readCard()
         content.concat(String(mfrc522.uid.uidByte[i], HEX));
     }
     //Serial.println();
-    //Serial.print("Message : ");
+    Serial.print("Message : ");
     content.toUpperCase();
+    Serial.println(content);
 }
 
 bool RFIDLock::isCardPresent()

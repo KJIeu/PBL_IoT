@@ -6,7 +6,7 @@
 
 //DHT sensor
 #define SoilHumiditySensor_pin A2      
-#define relayPin 9
+#define relayPin 45
 
 class PlantAutowater
 {

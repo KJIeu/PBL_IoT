@@ -12,6 +12,8 @@ void WaterLeakageControl::init()
 
 bool WaterLeakageControl::checkWater()
 {
+    Serial.print("Water state: ");
+    Serial.println(analogRead(Water_sensor_pin));
     if( analogRead(Water_sensor_pin) > 300 && waterTapPosition) 
     {
         servo2.write(90);
